@@ -41,7 +41,6 @@ class Calculator extends Component {
     }
 
     if (this.state.isFirstExpr === false) {
-      
       if (result2 == null) {
         this.secondNum = "" + this.secondNum + num
         this.setState({
