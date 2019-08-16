@@ -155,6 +155,7 @@ class Calculator extends Component {
 
   handleEqual = () => {
     let result = 0;
+    let finalResult;
     let numFirstNum = Number(this.firstNum)
     let numSecondNum = Number(this.secondNum)
 
@@ -167,9 +168,10 @@ class Calculator extends Component {
     } else if (this.symbol === "/") {
       result = numFirstNum / numSecondNum
     }
+    finalResult = result.toFixed(5)
     
     this.setState({
-      display: result,
+      display: finalResult,
       convertNum: true,
       convert2ndNum: true,
       isFirstExpr: true
@@ -180,6 +182,7 @@ class Calculator extends Component {
     document.querySelector(".decimal").disabled = false
   }
   
+
 
   render() {
     return(
