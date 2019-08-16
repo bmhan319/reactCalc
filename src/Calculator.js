@@ -36,11 +36,12 @@ class Calculator extends Component {
           display: this.firstNum + this.symbol,
           isFirstExpr: false
         })
+        document.querySelector(".decimal").disabled = false
       }
     }
 
     if (this.state.isFirstExpr === false) {
-      document.querySelector(".decimal").disabled = false
+      
       if (result2 == null) {
         this.secondNum = "" + this.secondNum + num
         this.setState({
