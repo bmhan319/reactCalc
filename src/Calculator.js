@@ -150,9 +150,10 @@ class Calculator extends Component {
   }
 
   handleEqual = () => {
-    let result;
+    let result = 0;
     let numFirstNum = Number(this.firstNum)
     let numSecondNum = Number(this.secondNum)
+
     if (this.symbol === "+") {
       result = numFirstNum + numSecondNum
     } else if (this.symbol === "-") {
