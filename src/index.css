@@ -208,9 +208,21 @@ grid-template-rows: 1.5fr repeat(5, 1fr);
   outline: none;
 }
 
-.text:hover {
-  opacity: .7;
+.flash {
+  -webkit-animation: flash-button .3s linear;
+  animation: flash-button .3s linear;
 }
+
+@-webkit-keyframes flash-button {  
+    from { opacity: .7; }
+    to   { opacity: default; }
+}
+
+@keyframes flash-button {  
+    from { opacity: .7; }
+    to   { opacity: default; }
+}
+
 
 @media only screen and (max-width: 600px) {
   .calc-container {

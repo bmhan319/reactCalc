@@ -16,7 +16,7 @@ class Calculator extends Component {
     let regex = /[-+*/]/
     let result1 = num.match(regex)
     let result2 = num.match(regex)
-    
+
     if (this.state.isFirstExpr) {
       if (result1 == null) {
         this.firstNum = "" + this.firstNum + num
@@ -46,7 +46,13 @@ class Calculator extends Component {
         this.decimal("second")
       }   
     }
-  }  
+  }
+
+  flash = (button) => {
+    let calcButton = document.querySelector(button)
+    calcButton.classList.add("flash")
+    setTimeout(function() { calcButton.classList.remove("flash") }, 500);
+  }
 
   decimal = (string) => {
     let hasDecimal1 = this.firstNum.match(/[.]/)
@@ -176,25 +182,25 @@ class Calculator extends Component {
         <div className="display">
           <p>{this.state.display}</p>
         </div>
-        <button onClick={this.handleClear} className="button text dark-grey clear">C</button>
-        <button onClick={this.handleConvert} className="button text dark-grey negative">+/-</button>
-        <button onClick={this.handlePercent} className="button text dark-grey percent">%</button>
-        <button onClick={() => {this.submit("/")}} className="button text orange divide">/</button>
-        <button onClick={() => {this.submit("7")}} className="button text light-grey seven">7</button>
-        <button onClick={() => {this.submit("8")}} className="button text light-grey eight">8</button>
-        <button onClick={() => {this.submit("9")}} className="button text light-grey nine">9</button>
-        <button onClick={() => {this.submit("*")}} className="button text orange multiply">X</button>
-        <button onClick={() => {this.submit("4")}} className="button text light-grey four">4</button>
-        <button onClick={() => {this.submit("5")}} className="button text light-grey five">5</button>
-        <button onClick={() => {this.submit("6")}} className="button text light-grey six">6</button>
-        <button onClick={() => {this.submit("-")}} className="button text orange subtract">-</button>
-        <button onClick={() => {this.submit("1")}} className="button text light-grey one">1</button>
-        <button onClick={() => {this.submit("2")}} className="button text light-grey two">2</button>
-        <button onClick={() => {this.submit("3")}} className="button text light-grey three">3</button>
-        <button onClick={() => {this.submit("+")}} className="button text orange add">+</button>
-        <button onClick={() => {this.submit("0")}} className="text light-grey zero">0</button>
-        <button onClick={() => {this.submit(".")}} className="button text light-grey decimal" disabled={false}>.</button>
-        <button onClick={this.handleEqual} className="button text orange equals">=</button>
+        <button onClick={() => {this.handleClear();this.flash(".clear")}} className="button text dark-grey clear">C</button>
+        <button onClick={() => {this.handleConvert();this.flash(".negative")}} className="button text dark-grey negative">+/-</button>
+        <button onClick={() => {this.handlePercent();this.flash(".percent")}} className="button text dark-grey percent">%</button>
+        <button onClick={() => {this.submit("/");this.flash(".divide")}} className="button text orange divide">/</button>
+        <button onClick={() => {this.submit("7");this.flash(".seven")}} className="button text light-grey seven">7</button>
+        <button onClick={() => {this.submit("8");this.flash(".eight")}} className="button text light-grey eight">8</button>
+        <button onClick={() => {this.submit("9");this.flash(".nine")}} className="button text light-grey nine">9</button>
+        <button onClick={() => {this.submit("*");this.flash(".multiply")}} className="button text orange multiply">X</button>
+        <button onClick={() => {this.submit("4");this.flash(".four")}} className="button text light-grey four">4</button>
+        <button onClick={() => {this.submit("5");this.flash(".five")}} className="button text light-grey five">5</button>
+        <button onClick={() => {this.submit("6");this.flash(".six")}} className="button text light-grey six">6</button>
+        <button onClick={() => {this.submit("-");this.flash(".subtract")}} className="button text orange subtract">-</button>
+        <button onClick={() => {this.submit("1");this.flash(".one")}} className="button text light-grey one">1</button>
+        <button onClick={() => {this.submit("2");this.flash(".two")}} className="button text light-grey two">2</button>
+        <button onClick={() => {this.submit("3");this.flash(".three")}} className="button text light-grey three">3</button>
+        <button onClick={() => {this.submit("+");this.flash(".add")}} className="button text orange add">+</button>
+        <button onClick={() => {this.submit("0");this.flash(".zero")}} className="text light-grey zero">0</button>
+        <button onClick={() => {this.submit(".");this.flash(".decimal")}} className="button text light-grey decimal" disabled={false}>.</button>
+        <button onClick={() => {this.handleEqual();this.flash(".equals")}} className="button text orange equals">=</button>
       </div>
     )
   }
