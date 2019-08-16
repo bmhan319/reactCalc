@@ -16,6 +16,8 @@ class Calculator extends Component {
     let regex = /[-+*/]/
     let result1 = num.match(regex)
     let result2 = num.match(regex)
+    let operator = num.match(regex)
+
 
     if (this.state.isFirstExpr) {
       if (result1 == null) {
@@ -23,7 +25,7 @@ class Calculator extends Component {
         this.setState({
           display: this.firstNum
         })
-        this.decimal("first")
+        this.decimal("first", num)
       } 
 
       if (result1 !== null) {
@@ -43,20 +45,20 @@ class Calculator extends Component {
           display: this.firstNum + this.symbol + this.secondNum,
           isFirstExpr: false,
         })
-        this.decimal("second")
+        this.decimal("second", this.secondNum)
       }   
     }
   }
 
-  flash = (button) => {
+  flash = (button, num) => {
     let calcButton = document.querySelector(button)
     calcButton.classList.add("flash")
     setTimeout(function() { calcButton.classList.remove("flash") }, 500);
   }
 
-  decimal = (string) => {
-    let hasDecimal1 = this.firstNum.match(/[.]/)
-    let hasDecimal2 = this.secondNum.match(/[.]/)
+  decimal = (string, num) => {
+    let hasDecimal1 = num.match(/[.]/)
+    let hasDecimal2 = num.match(/[.]/)
 
     if (hasDecimal1 && string === "first")  {
       document.querySelector(".decimal").disabled = "true"
