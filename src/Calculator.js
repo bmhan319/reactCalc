@@ -53,8 +53,16 @@ class Calculator extends Component {
       this.setState({
         display: toPos
       })
-    }
-      
+    }    
+  }
+
+  handlePercent = () => {
+    let convert = parseFloat(this.firstNum)
+    let percent = convert / 100
+    this.firstNum = percent
+    this.setState({
+      display: percent
+    })
   }
   
 
@@ -66,7 +74,7 @@ class Calculator extends Component {
         </div>
         <button onClick={this.handleClear} className="button text dark-grey clear">C</button>
         <button onClick={this.handleConvert} className="button text dark-grey negative">+/-</button>
-        <button className="button text dark-grey percent">%</button>
+        <button onClick={this.handlePercent} className="button text dark-grey percent">%</button>
         <button onClick={() => {this.submit("/")}} className="button text orange divide">/</button>
         <button onClick={() => {this.submit(7)}} className="button text light-grey seven">7</button>
         <button onClick={() => {this.submit(8)}} className="button text light-grey eight">8</button>
