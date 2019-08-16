@@ -16,8 +16,10 @@ class Calculator extends Component {
     let regex = /[-+*/]/
     let result1 = num.match(regex)
     let result2 = num.match(regex)
-    let operator = num.match(regex)
 
+    if (result1 !== null && this.firstNum.length === 0) {
+      this.handleClear()
+    }
 
     if (this.state.isFirstExpr) {
       if (result1 == null) {
@@ -28,7 +30,7 @@ class Calculator extends Component {
         this.decimal("first", num)
       } 
 
-      if (result1 !== null) {
+      if (result1 !== null && this.firstNum.length > 0) {
         this.symbol = num
         this.setState({
           display: this.firstNum + this.symbol,
