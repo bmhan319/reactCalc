@@ -208,6 +208,10 @@ grid-template-rows: 1.5fr repeat(5, 1fr);
   outline: none;
 }
 
+.text:hover {
+  opacity: .7;
+}
+
 @media only screen and (max-width: 600px) {
   .calc-container {
     width: 80%;

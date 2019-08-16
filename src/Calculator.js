@@ -2,15 +2,14 @@ import React, {Component} from 'react';
 
 class Calculator extends Component {
   state = {
-    display: 0
+    display: 0,
+    convertNum: true,
+    convert2ndNum: true,
+    isFirstExpr: true
   }
 
   firstNum = ""
   secondNum = ""
-  convertNum = true
-  convert2ndNum = true
-  isFirstExpr = true
-  equation = ""
   symbol = ""
 
   submit = (num) => {
@@ -18,43 +17,57 @@ class Calculator extends Component {
     let result1 = num.match(regex)
     let result2 = num.match(regex)
     
-    if (this.isFirstExpr) {
+    if (this.state.isFirstExpr) {
       if (result1 == null) {
         this.firstNum = "" + this.firstNum + num
         this.setState({
-          display: this.firstNum,
+          display: this.firstNum
         })
+        this.decimal("first")
       } 
 
       if (result1 !== null) {
         this.symbol = num
         this.setState({
-          display: this.firstNum + this.symbol
+          display: this.firstNum + this.symbol,
+          isFirstExpr: false
         })
-        this.isFirstExpr = false;
       }
     }
 
-    if (this.isFirstExpr === false) {
+    if (this.state.isFirstExpr === false) {
+      document.querySelector(".decimal").disabled = false
       if (result2 == null) {
         this.secondNum = "" + this.secondNum + num
         this.setState({
           display: this.firstNum + this.symbol + this.secondNum,
+          isFirstExpr: false,
         })
+        this.decimal("second")
       }   
-      this.isFirstExpr = false;
     }
-    this.equation = this.firstNum + this.symbol + this.secondNum
   }  
+
+  decimal = (string) => {
+    let hasDecimal1 = this.firstNum.match(/[.]/)
+    let hasDecimal2 = this.secondNum.match(/[.]/)
+
+    if (hasDecimal1 && string === "first")  {
+      document.querySelector(".decimal").disabled = "true"
+    } else if (hasDecimal2 && string === "second") {
+      document.querySelector(".decimal").disabled = "true"
+    }
+  }
 
   handleClear  = () => {
     this.firstNum = ""
     this.secondNum = ""
-    this.isFirstExpr = true
-    this.convertNum = true
-    this.convert2ndNum = true
+    document.querySelector(".decimal").disabled = false
     this.setState({
-      display: 0
+      display: 0,
+      convertNum: true,
+      convert2ndNum: true,
+      isFirstExpr: true
     })
   }
 
@@ -65,38 +78,45 @@ class Calculator extends Component {
     let  convert = parseFloat(this.firstNum)
     let  convert2nd = parseFloat(this.secondNum)
 
-    if (this.isFirstExpr) {
-      if (this.convertNum) {
+    if (this.state.isFirstExpr) {
+      if (this.state.convertNum) {
         let toNeg = -Math.abs(convert)
         toNeg = toNeg.toString()
-        this.convertNum = false
+        this.setState({
+          convertNum: false
+        })
         this.firstNum = toNeg
       } else {
         let toPos = Math.abs(convert)
         toPos = toPos.toString()
-        this.convertNum = true
+        this.setState({
+          convertNum: true
+        })
         this.firstNum = toPos
       }
       this.setState({
         display: this.firstNum
       })
     } else {
-      if (this.convert2ndNum) {
+      if (this.state.convert2ndNum) {
         let toNeg = -Math.abs(convert2nd)
         toNeg = toNeg.toString()
-        this.convert2ndNum = false
+        this.setState({
+          convert2ndNum: false
+        })
         this.secondNum = toNeg
       } else {
         let toPos = Math.abs(convert2nd)
         toPos = toPos.toString()
-        this.convert2ndNum = true
+        this.setState({
+          convert2ndNum: true
+        })
         this.secondNum = toPos
       }
       this.setState({
         display: this.firstNum + this.symbol + "(" + this.secondNum + ")"
       })
     }
-    this.equation = this.firstNum + this.symbol + this.secondNum
   }
 
   handlePercent = () => {
@@ -108,7 +128,7 @@ class Calculator extends Component {
     let percent = convert / 100
     let percent2nd = convert2nd / 100
 
-    if (this.isFirstExpr) {
+    if (this.state.isFirstExpr) {
       percent = percent.toString()
       this.firstNum = percent
       this.setState({
@@ -121,7 +141,6 @@ class Calculator extends Component {
         display: this.firstNum + this.symbol + this.secondNum
       })
     }
-    this.equation = this.firstNum + this.symbol + this.secondNum
   }
 
   handleEqual = () => {
@@ -138,18 +157,16 @@ class Calculator extends Component {
       result = numFirstNum / numSecondNum
     }
     
-
-    //let result = eval(this.equation)
     this.setState({
-      display: result
+      display: result,
+      convertNum: true,
+      convert2ndNum: true,
+      isFirstExpr: true
     })
     this.firstNum = result
     this.secondNum = ""
-    this.convertNum = true
-    this.convert2ndNum = true
-    this.isFirstExpr = true
-    this.equation = ""
     this.symbol = ""
+    document.querySelector(".decimal").disabled = false
   }
   
 
@@ -176,7 +193,7 @@ class Calculator extends Component {
         <button onClick={() => {this.submit("3")}} className="button text light-grey three">3</button>
         <button onClick={() => {this.submit("+")}} className="button text orange add">+</button>
         <button onClick={() => {this.submit("0")}} className="text light-grey zero">0</button>
-        <button onClick={() => {this.submit(".")}} className="button text light-grey decimal">.</button>
+        <button onClick={() => {this.submit(".")}} className="button text light-grey decimal" disabled={false}>.</button>
         <button onClick={this.handleEqual} className="button text orange equals">=</button>
       </div>
     )
