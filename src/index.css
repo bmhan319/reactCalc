@@ -168,10 +168,20 @@ grid-template-rows: 1.5fr repeat(5, 1fr);
   align-items: center;
   justify-content: flex-end;
   padding-right: 16px;
+  overflow-x: hidden;
 }
 
-.display p{
+.display-text{
   margin: 0;
+  
+}
+
+.display-text-small{
+  font-size: 1.25em;
+  letter-spacing: 1.2px;
+}
+
+.display-text-large{
   font-size: 2.25em;
   letter-spacing: 1px;
 }

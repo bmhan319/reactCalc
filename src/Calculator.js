@@ -28,6 +28,7 @@ class Calculator extends Component {
           display: this.firstNum
         })
         this.decimal("first", num)
+        this.display()
       } 
 
       if (result1 !== null && this.firstNum.length > 0) {
@@ -37,6 +38,7 @@ class Calculator extends Component {
           isFirstExpr: false
         })
         document.querySelector(".decimal").disabled = false
+        this.display()
       }
     }
 
@@ -48,7 +50,8 @@ class Calculator extends Component {
           isFirstExpr: false,
         })
         this.decimal("second", this.secondNum)
-      }   
+      }
+      this.display()
     }
   }
 
@@ -79,6 +82,7 @@ class Calculator extends Component {
       convert2ndNum: true,
       isFirstExpr: true
     })
+    this.display()
   }
 
   handleConvert = () => {
@@ -107,6 +111,7 @@ class Calculator extends Component {
       this.setState({
         display: this.firstNum
       })
+      this.display()
     } else {
       if (this.state.convert2ndNum) {
         let toNeg = -Math.abs(convert2nd)
@@ -126,6 +131,7 @@ class Calculator extends Component {
       this.setState({
         display: this.firstNum + this.symbol + "(" + this.secondNum + ")"
       })
+    this.display()
     }
   }
 
@@ -144,12 +150,14 @@ class Calculator extends Component {
       this.setState({
         display: this.firstNum
       })
+      this.display()
     } else {
       percent2nd = percent2nd.toString()
       this.secondNum = percent2nd
       this.setState({
         display: this.firstNum + this.symbol + this.secondNum
       })
+      this.display()
     }
   }
 
@@ -180,15 +188,26 @@ class Calculator extends Component {
     this.secondNum = ""
     this.symbol = ""
     document.querySelector(".decimal").disabled = false
+    this.display(finalResult)
   }
   
+  display = (resultLength) => {
+    let display = document.querySelector('.display-text')
 
+    if (this.firstNum.length + this.symbol.length + this.secondNum.length > 10 || resultLength > 10) {
+      display.classList.add("display-text-small")
+      display.classList.remove("display-text-large")
+    } else if (this.firstNum.length + this.symbol.length + this.secondNum.length <= 10 || resultLength <= 10 ) {
+      display.classList.remove("display-text-small")
+      display.classList.add("display-text-large")
+    }
+  }
 
   render() {
     return(
       <div className="calc-container">
         <div className="display">
-          <p>{this.state.display}</p>
+          <p className="display-text display-text-large">{this.state.display}</p>
         </div>
         <button onClick={() => {this.handleClear();this.flash(".clear")}} className="button text dark-grey clear">C</button>
         <button onClick={() => {this.handleConvert();this.flash(".negative")}} className="button text dark-grey negative">+/-</button>
