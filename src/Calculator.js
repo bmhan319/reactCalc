@@ -2,16 +2,18 @@ import React, {Component} from 'react';
 
 class Calculator extends Component {
   state = {
-    display: 0,
+    display: 0,           //this is what is shown on the calc display
     convertNum: true,
     convert2ndNum: true,
-    isFirstExpr: true
+    isFirstExpr: true     //when true, calc will deal with first input number, false will be the 2nd number
   }
 
+  //Global Variables for the equation
   firstNum = ""
   secondNum = ""
   symbol = ""
 
+  //to submit the numbers
   submit = (num) => {
     let regex = /[-+*/]/
     let result1 = num.match(regex)
@@ -19,6 +21,15 @@ class Calculator extends Component {
     let operator = num.match(regex)
     console.log(operator)
 
+    //if arithmatic operators are pushed first, reset
+    if (result1 !== null && this.firstNum.length === 0) {
+      this.handleClear()
+    }
+
+    //if a valid numerical or decimal key is pressed first, add it to the state
+    //decimal function added to make sure that the decimal only gets pressed once for the first input number,
+    //then Pointer Events is disabled on that button
+    //display function added to check the number of characters on the display and resize when necessary
     if (this.state.isFirstExpr) {
       if (result1 == null) {
         this.firstNum = "" + this.firstNum + num
@@ -26,36 +37,47 @@ class Calculator extends Component {
           display: this.firstNum
         })
         this.decimal("first", num)
+        this.display()
       } 
 
-      if (result1 !== null) {
+      //if an arithmatic operator is pressed, add it to the state
+      //display function added to check the number of characters on the display and resize when necessary
+      if (result1 !== null && this.firstNum.length > 0) {
         this.symbol = num
         this.setState({
           display: this.firstNum + this.symbol,
           isFirstExpr: false
         })
+        document.querySelector(".decimal").disabled = false
+        this.display()
       }
     }
-
+    
+    //moving the calculator onto the 2nd input number
+    //decimal function added to make sure that the decimal only gets pressed once for the 2nd input number,
+    //then Pointer Events is disabled on that button
+    //display function added to check the number of characters on the display and resize when necessary
     if (this.state.isFirstExpr === false) {
-      document.querySelector(".decimal").disabled = false
       if (result2 == null) {
         this.secondNum = "" + this.secondNum + num
         this.setState({
           display: this.firstNum + this.symbol + this.secondNum,
           isFirstExpr: false,
         })
-        this.decimal("second", num)
-      }   
+        this.decimal("second", this.secondNum)
+      }
+      this.display()
     }
   }
 
+  //changes opacity to the button on click, function is called on the specific html button
   flash = (button) => {
     let calcButton = document.querySelector(button)
     calcButton.classList.add("flash")
     setTimeout(function() { calcButton.classList.remove("flash") }, 500);
   }
 
+  //to limit user to one decimal button press for each number
   decimal = (string, num) => {
     let hasDecimal1 = num.match(/[.]/)
     let hasDecimal2 = num.match(/[.]/)
@@ -67,6 +89,8 @@ class Calculator extends Component {
     }
   }
 
+  //reset the calculator to initial state
+  //calls display function to see if text needs to be reset to larger size
   handleClear  = () => {
     this.firstNum = ""
     this.secondNum = ""
@@ -77,16 +101,24 @@ class Calculator extends Component {
       convert2ndNum: true,
       isFirstExpr: true
     })
+    this.display()
   }
 
+  //converts number on the display to negative or positive
   handleConvert = () => {
+    
+    //to prevent user from hitting the conversion button prior to entering a number
     if (this.firstNum === "") {
       return;
     }
+
+    //change both numbers from string to a float number
     let  convert = parseFloat(this.firstNum)
     let  convert2nd = parseFloat(this.secondNum)
 
+    //if true, handle the first number
     if (this.state.isFirstExpr) {
+      // if true, make the number negative
       if (this.state.convertNum) {
         let toNeg = -Math.abs(convert)
         toNeg = toNeg.toString()
@@ -94,6 +126,7 @@ class Calculator extends Component {
           convertNum: false
         })
         this.firstNum = toNeg
+      //if false, make the number positive
       } else {
         let toPos = Math.abs(convert)
         toPos = toPos.toString()
@@ -105,7 +138,11 @@ class Calculator extends Component {
       this.setState({
         display: this.firstNum
       })
+      this.display()
+
+    //if false, then handle second number    
     } else {
+      // if true, make the number negative
       if (this.state.convert2ndNum) {
         let toNeg = -Math.abs(convert2nd)
         toNeg = toNeg.toString()
@@ -113,6 +150,7 @@ class Calculator extends Component {
           convert2ndNum: false
         })
         this.secondNum = toNeg
+      //if false, make the number positive
       } else {
         let toPos = Math.abs(convert2nd)
         toPos = toPos.toString()
@@ -124,10 +162,13 @@ class Calculator extends Component {
       this.setState({
         display: this.firstNum + this.symbol + "(" + this.secondNum + ")"
       })
+    this.display()
     }
   }
 
+  //converts number to a percent
   handlePercent = () => {
+    //prevents user from hitting the button prior to entering a number
     if (this.firstNum === "") {
       return;
     }
@@ -135,24 +176,29 @@ class Calculator extends Component {
     let convert2nd = parseFloat(this.secondNum)
     let percent = convert / 100
     let percent2nd = convert2nd / 100
-
+    //if true, handle first number
     if (this.state.isFirstExpr) {
       percent = percent.toString()
       this.firstNum = percent
       this.setState({
         display: this.firstNum
       })
+      this.display()
+    //if true, handle first number
     } else {
       percent2nd = percent2nd.toString()
       this.secondNum = percent2nd
       this.setState({
         display: this.firstNum + this.symbol + this.secondNum
       })
+      this.display()
     }
   }
 
+  //compute the two numbers based on the arithmatic operator chosen
   handleEqual = () => {
     let result = 0;
+    let finalResult;
     let numFirstNum = Number(this.firstNum)
     let numSecondNum = Number(this.secondNum)
 
@@ -165,9 +211,13 @@ class Calculator extends Component {
     } else if (this.symbol === "/") {
       result = numFirstNum / numSecondNum
     }
+    //give result back with 5 decimal places
+    finalResult = result.toFixed(5)
     
+    //reset most of the states and variables back to initial state
+    //display and firstNum show result in case user wants to compute further
     this.setState({
-      display: result,
+      display: finalResult,
       convertNum: true,
       convert2ndNum: true,
       isFirstExpr: true
@@ -176,14 +226,27 @@ class Calculator extends Component {
     this.secondNum = ""
     this.symbol = ""
     document.querySelector(".decimal").disabled = false
+    this.display(finalResult)
   }
   
+  //change the text size on the display depending on total number of characters
+  display = (resultLength) => {
+    let display = document.querySelector('.display-text')
+
+    if (this.firstNum.length + this.symbol.length + this.secondNum.length > 10 || resultLength > 10) {
+      display.classList.add("display-text-small")
+      display.classList.remove("display-text-large")
+    } else if (this.firstNum.length + this.symbol.length + this.secondNum.length <= 10 || resultLength <= 10 ) {
+      display.classList.remove("display-text-small")
+      display.classList.add("display-text-large")
+    }
+  }
 
   render() {
     return(
       <div className="calc-container">
         <div className="display">
-          <p>{this.state.display}</p>
+          <p className="display-text display-text-large">{this.state.display}</p>
         </div>
         <button onClick={() => {this.handleClear();this.flash(".clear")}} className="button text dark-grey clear">C</button>
         <button onClick={() => {this.handleConvert();this.flash(".negative")}} className="button text dark-grey negative">+/-</button>

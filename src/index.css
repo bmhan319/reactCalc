@@ -6,6 +6,8 @@ body {
   background-color: #666;
 }
 
+
+/* ----- Structuring Elements with CSS Grid ----- */
 .calc-container {
 border: 1px solid #000;
 border-radius: 5px;
@@ -16,6 +18,7 @@ grid-template-columns: repeat(4, 1fr);
 grid-template-rows: 1.5fr repeat(5, 1fr);
 }
 
+/* ----- Display ----- */
 .display {
   grid-column-start: 1;
   grid-column-end: 5;
@@ -23,6 +26,7 @@ grid-template-rows: 1.5fr repeat(5, 1fr);
   grid-row-end: 2;
 }
 
+/* ----- Buttons ----- */
 .clear {
   grid-column-start: 1;
   grid-column-end: 2;
@@ -161,6 +165,7 @@ grid-template-rows: 1.5fr repeat(5, 1fr);
   
 }
 
+/* ----- Display ----- */
 .display {
   background-color: #333;
   color: #fff;
@@ -168,14 +173,25 @@ grid-template-rows: 1.5fr repeat(5, 1fr);
   align-items: center;
   justify-content: flex-end;
   padding-right: 16px;
+  overflow-x: hidden;
 }
 
-.display p{
+.display-text{
   margin: 0;
+  
+}
+
+.display-text-small{
+  font-size: 1.25em;
+  letter-spacing: 1.2px;
+}
+
+.display-text-large{
   font-size: 2.25em;
   letter-spacing: 1px;
 }
 
+/* ----- Buttons ----- */
 .button {
   height: 50px;
   border-right: 1px solid #000;
