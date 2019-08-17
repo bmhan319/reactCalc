@@ -18,6 +18,8 @@ class Calculator extends Component {
     let regex = /[-+*/]/
     let result1 = num.match(regex)
     let result2 = num.match(regex)
+    let operator = num.match(regex)
+    console.log(operator)
 
     //if arithmatic operators are pushed first, reset
     if (result1 !== null && this.firstNum.length === 0) {
