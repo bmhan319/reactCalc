@@ -12,14 +12,13 @@ class Calculator extends Component {
   firstNum = ""
   secondNum = ""
   symbol = ""
+  //isFirstExpr = true
 
   //to submit the numbers
   submit = (num) => {
     let regex = /[-+*/]/
     let result1 = num.match(regex)
     let result2 = num.match(regex)
-    let operator = num.match(regex)
-    console.log(operator)
 
     //if arithmatic operators are pushed first, reset
     if (result1 !== null && this.firstNum.length === 0) {
@@ -48,6 +47,7 @@ class Calculator extends Component {
           display: this.firstNum + this.symbol,
           isFirstExpr: false
         })
+        //this.isFirstExpr = false
         document.querySelector(".decimal").disabled = false
         this.display()
       }
@@ -64,6 +64,7 @@ class Calculator extends Component {
           display: this.firstNum + this.symbol + this.secondNum,
           isFirstExpr: false,
         })
+        //this.isFirstExpr = false
         this.decimal("second", this.secondNum)
       }
       this.display()
@@ -101,6 +102,7 @@ class Calculator extends Component {
       convert2ndNum: true,
       isFirstExpr: true
     })
+    //this.isFirstExpr = true
     this.display()
   }
 
@@ -198,7 +200,6 @@ class Calculator extends Component {
   //compute the two numbers based on the arithmatic operator chosen
   handleEqual = () => {
     let result = 0;
-    let finalResult;
     let numFirstNum = Number(this.firstNum)
     let numSecondNum = Number(this.secondNum)
 
@@ -211,24 +212,23 @@ class Calculator extends Component {
     } else if (this.symbol === "/") {
       result = numFirstNum / numSecondNum
     }
-    //give result back with 5 decimal places
-    finalResult = result.toFixed(5)
     
     //reset most of the states and variables back to initial state
     //display and firstNum show result in case user wants to compute further
     this.setState({
-      display: finalResult,
+      display: result,
       convertNum: true,
       convert2ndNum: true,
       isFirstExpr: true
     })
-    this.firstNum = result
+    //this.isFirstExpr = true
+    this.firstNum = result.toString()
     this.secondNum = ""
     this.symbol = ""
     document.querySelector(".decimal").disabled = false
-    this.display(finalResult)
+    this.display(result)
   }
-  
+
   //change the text size on the display depending on total number of characters
   display = (resultLength) => {
     let display = document.querySelector('.display-text')
